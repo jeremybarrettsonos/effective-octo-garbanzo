@@ -1,7 +1,15 @@
 import ServiceSelector from '../components/ServiceSelector';
 import SearchBar from '../components/SearchBar';
+import ContentRow from '../components/ContentRow';
+import { useServices } from '../hooks/useServices';
+import { usePopular } from '../hooks/usePopular';
 
 export default function Home() {
+  const { selectedIds } = useServices();
+  const { data: popular, isLoading } = usePopular(
+    selectedIds.length > 0 ? selectedIds : undefined
+  );
+
   return (
     <div className="p-8">
       <h1 className="text-3xl font-bold mb-2">StreamFinder</h1>
@@ -11,7 +19,34 @@ export default function Home() {
         <SearchBar />
       </div>
 
-      <ServiceSelector />
+      <div className="mb-8">
+        <ServiceSelector />
+      </div>
+
+      {isLoading && (
+        <div className="text-gray-400">Loading trending content...</div>
+      )}
+
+      {popular && (
+        <>
+          <ContentRow
+            title="Trending Now"
+            titles={popular.filter((t) => t.object_type === 'movie').slice(0, 10)}
+            selectedProviderIds={selectedIds}
+          />
+          <ContentRow
+            title="Popular TV Shows"
+            titles={popular.filter((t) => t.object_type === 'show').slice(0, 10)}
+            selectedProviderIds={selectedIds}
+          />
+        </>
+      )}
+
+      {selectedIds.length === 0 && (
+        <p className="text-gray-500 text-sm mt-4">
+          Select your streaming services above to see what's available on them.
+        </p>
+      )}
     </div>
   );
 }
