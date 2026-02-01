@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import ServiceSelector from '../components/ServiceSelector';
 import SearchBar from '../components/SearchBar';
 import ContentRow from '../components/ContentRow';
@@ -12,7 +13,12 @@ export default function Home() {
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold mb-2">StreamFinder</h1>
+      <div className="flex items-center justify-between mb-2">
+        <h1 className="text-3xl font-bold">StreamFinder</h1>
+        <Link to="/watchlist" className="text-blue-400 hover:text-blue-300">
+          My Watchlist
+        </Link>
+      </div>
       <p className="text-gray-400 mb-6">Find where to watch your favorite movies and shows</p>
 
       <div className="mb-6">

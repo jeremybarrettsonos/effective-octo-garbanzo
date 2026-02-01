@@ -1,11 +1,13 @@
 import { useParams, Link } from 'react-router-dom';
 import { useTitleDetail } from '../hooks/useTitleDetail';
 import { useServices } from '../hooks/useServices';
+import { useWatchlist } from '../hooks/useWatchlist';
 import { POPULAR_PROVIDERS } from '../services/justwatch';
 
 export default function TitleDetail() {
   const { type, id } = useParams();
   const { selectedIds } = useServices();
+  const { add, remove, isInWatchlist } = useWatchlist();
 
   const { data: title, isLoading, error } = useTitleDetail(
     type as 'movie' | 'show',
@@ -134,6 +136,25 @@ export default function TitleDetail() {
               {selectedIds.length > 0 && ' Try adding more services on the home page.'}
             </p>
           )}
+
+          {/* Watchlist Button */}
+          <div className="mt-6">
+            {isInWatchlist(title.id, title.object_type) ? (
+              <button
+                onClick={() => remove(title.id, title.object_type)}
+                className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white transition-colors"
+              >
+                ✓ In Watchlist - Remove
+              </button>
+            ) : (
+              <button
+                onClick={() => add(title)}
+                className="px-4 py-2 bg-green-600 hover:bg-green-500 rounded-lg text-white transition-colors"
+              >
+                + Add to Watchlist
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
